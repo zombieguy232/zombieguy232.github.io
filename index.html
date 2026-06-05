@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zombieguy88</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --bg:      #0b0b0b;
+      --surface: #111111;
+      --border:  #1e1e1e;
+      --accent:  #00d4ff;
+      --text:    #f0f0f0;
+      --muted:   #888888;
+    }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem; height: 56px;
+      background: rgba(11,11,11,0.93);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-brand { font-weight: 700; font-size: 1rem; }
+    .nav-brand span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a {
+      font-size: 0.82rem; font-weight: 600;
+      color: var(--muted); transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center;
+      padding: 8rem 2.5rem 4rem;
+      max-width: 820px; margin: 0 auto;
+    }
+    .hero-eyebrow {
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 1.2rem;
+      opacity: 0; animation: fadein 0.5s 0.1s forwards;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+      font-weight: 700; line-height: 1.15; margin-bottom: 1.2rem;
+      opacity: 0; animation: fadein 0.5s 0.25s forwards;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero p {
+      font-size: 1rem; color: var(--muted); font-weight: 300;
+      max-width: 520px; margin-bottom: 2.2rem;
+      opacity: 0; animation: fadein 0.5s 0.4s forwards;
+    }
+    .hero-btns {
+      display: flex; gap: 0.8rem; flex-wrap: wrap;
+      opacity: 0; animation: fadein 0.5s 0.55s forwards;
+    }
+    .btn {
+      display: inline-block; padding: 0.62rem 1.4rem;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.82rem; font-weight: 600;
+      border-radius: 6px; cursor: pointer; border: none;
+      transition: all 0.2s;
+    }
+    .btn-accent { background: var(--accent); color: #000; }
+    .btn-accent:hover { background: #33ddff; transform: translateY(-1px); }
+    .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-ghost:hover { border-color: #444; background: #141414; transform: translateY(-1px); }
+
+    /* ── DIVIDER ── */
+    .divider { height: 1px; background: var(--border); max-width: 1100px; margin: 0 auto; }
+
+    /* ── SHARED SECTION ── */
+    section { padding: 5rem 2.5rem; max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 2.5px;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      font-weight: 700; color: var(--text); margin-bottom: 0.5rem;
+    }
+    .section-desc {
+      font-size: 0.9rem; color: var(--muted); font-weight: 300;
+      max-width: 540px; margin-bottom: 2.2rem; line-height: 1.7;
+    }
+
+    /* ── LINK CARDS ── */
+    .link-cards { display: flex; flex-direction: column; gap: 0.65rem; }
+
+    .link-card {
+      display: flex; align-items: center; gap: 1.2rem;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1.15rem 1.4rem;
+      transition: all 0.2s; cursor: pointer;
+      text-decoration: none; color: inherit;
+    }
+    .link-card:hover {
+      border-color: rgba(0,212,255,0.25);
+      background: #141414; transform: translateX(4px);
+    }
+    .lc-icon {
+      width: 42px; height: 42px; border-radius: 8px; flex-shrink: 0;
+      background: rgba(0,212,255,0.07);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem;
+    }
+    .lc-body { flex: 1; min-width: 0; }
+    .lc-name { font-size: 0.93rem; font-weight: 700; color: var(--text); margin-bottom: 0.15rem; }
+    .lc-desc { font-size: 0.79rem; color: var(--muted); }
+    .lc-url  { font-size: 0.7rem; color: var(--accent); opacity: 0.55; margin-top: 0.12rem; }
+    .lc-arrow { color: var(--muted); font-size: 1rem; flex-shrink: 0; transition: transform 0.2s; }
+    .link-card:hover .lc-arrow { transform: translateX(3px); color: var(--accent); }
+
+    /* ── VISITOR COUNTER ── */
+    .visitor-bar {
+      display: flex; align-items: center; gap: 0.7rem;
+      margin-top: 2rem;
+      opacity: 0; animation: fadein 0.5s 0.65s forwards;
+    }
+    .visitor-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #00ff88; flex-shrink: 0;
+      box-shadow: 0 0 6px #00ff88;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(0.85); }
+    }
+    .visitor-text {
+      font-size: 0.82rem; color: var(--muted);
+    }
+    .visitor-text strong { color: var(--text); font-weight: 700; }
+    .visitor-text sup { font-size: 0.65rem; color: var(--muted); }
+
+    /* ── FOOTNOTE ── */
+    .footnote {
+      text-align: center; padding: 0.8rem 2.5rem 1.6rem;
+      font-size: 0.7rem; color: #3d3d3d;
+    }
+
+    /* ── ABOUT ── */
+    .about-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 2.2rem;
+    }
+    .about-box p {
+      font-size: 0.9rem; color: var(--muted);
+      line-height: 1.8; margin-bottom: 0.9rem;
+    }
+    .about-box p:last-of-type { margin-bottom: 0; }
+    .about-box strong { color: var(--text); font-weight: 600; }
+    .about-note {
+      margin-top: 1.4rem; padding: 0.9rem 1.1rem;
+      background: rgba(0,212,255,0.04); border: 1px solid rgba(0,212,255,0.1);
+      border-radius: 6px; font-size: 0.8rem; color: var(--muted); line-height: 1.65;
+    }
+    .about-note strong { color: var(--accent); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .foot-brand { font-size: 0.85rem; font-weight: 700; color: var(--muted); }
+    .foot-brand span { color: var(--accent); }
+    .foot-note { font-size: 0.75rem; color: #3a3a3a; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(14px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      nav { padding: 0 1rem; }
+      .nav-links { gap: 1rem; }
+      .nav-links a { font-size: 0.76rem; }
+      .hero { padding: 7rem 1.2rem 3rem; }
+      section { padding: 3.5rem 1.2rem; }
+      footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand"><span>zombieguy</span>88</div>
+  <div class="nav-links">
+    <a href="#eaglercraft">eaglercraft</a>
+    <a href="#games">games</a>
+    <a href="#random">random</a>
+    <a href="#about">about</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">hey, welcome 👋</div>
+  <h1>i'm <span>zombieguy88</span>.</h1>
+  <p>i host games and other stuff so you can actually use them at school. i don't make any of this — i just find cool things and put them online for free.</p>
+  <div class="visitor-bar">
+    <div class="visitor-dot"></div>
+    <div class="visitor-text">currently using this site: <strong>39,850<sup>*</sup></strong> people</div>
+  </div>
+
+  <div class="hero-btns">
+    <a href="#games" class="btn btn-accent">unblocked games</a>
+    <a href="#eaglercraft" class="btn btn-ghost">eaglercraft</a>
+    <a href="#random" class="btn btn-ghost">random stuff</a>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════
+     EAGLERCRAFT
+══════════════════════════════ -->
+<section id="eaglercraft">
+  <div class="section-label">eaglercraft</div>
+  <div class="section-title reveal">minecraft in your browser</div>
+  <div class="section-desc reveal">no download, no account, no install. just click and play. both work at school.</div>
+
+  <div class="link-cards reveal">
+
+    <a class="link-card" href="https://zombieguy232.github.io/resent" target="_blank">
+      <div class="lc-icon">⚔️</div>
+      <div class="lc-body">
+        <div class="lc-name">Resent 5.1</div>
+        <div class="lc-desc">eaglercraft with extra features built in — better for pvp and stuff</div>
+        <div class="lc-url">zombieguy232.github.io/resent</div>
+      </div>
+      <div class="lc-arrow">→</div>
+    </a>
+
+    <a class="link-card" href="https://zombieguy232.github.io/mine" target="_blank">
+      <div class="lc-icon">⛏️</div>
+      <div class="lc-body">
+        <div class="lc-name">Eaglercraft</div>
+        <div class="lc-desc">normal eaglercraft, no extra stuff — just plain minecraft 1.8 in the browser</div>
+        <div class="lc-url">zombieguy232.github.io/mine</div>
+      </div>
+      <div class="lc-arrow">→</div>
+    </a>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════
+     UNBLOCKED GAMES
+══════════════════════════════ -->
+<section id="games">
+  <div class="section-label">unblocked games</div>
+  <div class="section-title reveal">games that work at school</div>
+  <div class="section-desc reveal">all browser-based. no downloads, no installs. just click and go.</div>
+
+  <div class="link-cards reveal">
+
+    <a class="link-card" href="https://zombieguy232.github.io/game" target="_blank">
+      <div class="lc-icon">🐒</div>
+      <div class="lc-body">
+        <div class="lc-name">MonkeyGG2</div>
+        <div class="lc-desc">a huge collection of unblocked games all in one place — if you can only bookmark one, bookmark this</div>
+        <div class="lc-url">zombieguy232.github.io/game</div>
+      </div>
+      <div class="lc-arrow">→</div>
+    </a>
+
+    <a class="link-card" href="https://zombieguy232.github.io/surf" target="_blank">
+      <div class="lc-icon">🛹</div>
+      <div class="lc-body">
+        <div class="lc-name">Subway Surfers</div>
+        <div class="lc-desc">the classic endless runner — dodge trains, collect coins, don't get caught</div>
+        <div class="lc-url">zombieguy232.github.io/surf</div>
+      </div>
+      <div class="lc-arrow">→</div>
+    </a>
+
+    <a class="link-card" href="https://zombieguy232.github.io/flappy" target="_blank">
+      <div class="lc-icon">🐦</div>
+      <div class="lc-body">
+        <div class="lc-name">Flappy Bird</div>
+        <div class="lc-desc">tap to fly through the pipes. simple. impossible. addicting.</div>
+        <div class="lc-url">zombieguy232.github.io/flappy</div>
+      </div>
+      <div class="lc-arrow">→</div>
+    </a>
+
+    <a class="link-card" href="https://zombieguy232.github.io/epstein" target="_blank">
+      <div class="lc-icon">🎃</div>
+      <div class="lc-body">
+        <div class="lc-name">Five Nights at Epstein</div>
+        <div class="lc-desc">a fnaf parody — survive the night, watch the cameras, don't run out of power</div>
+        <div class="lc-url">zombieguy232.github.io/epstein</div>
+      </div>
+      <div class="lc-arrow">→</div>
+    </a>
+
+    <a class="link-card" href="https://zombieguy232.github.io/doom" target="_blank">
+      <div class="lc-icon">🔫</div>
+      <div class="lc-body">
+        <div class="lc-name">DOOM</div>
+        <div class="lc-desc">the full original doom game running in the browser — it actually works</div>
+        <div class="lc-url">zombieguy232.github.io/doom</div>
+      </div>
+      <div class="lc-arrow">→</div>
+    </a>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════
+     RANDOM STUFF
+══════════════════════════════ -->
+<section id="random">
+  <div class="section-label">random stuff</div>
+  <div class="section-title reveal">other things i'm hosting</div>
+  <div class="section-desc reveal">misc stuff i thought was cool or funny. no real theme here.</div>
+
+  <div class="link-cards reveal">
+
+    <a class="link-card" href="https://zombieguy232.github.io/NYAN-CAT" target="_blank">
+      <div class="lc-icon">🌈</div>
+      <div class="lc-body">
+        <div class="lc-name">Nyan Cat</div>
+        <div class="lc-desc">nyan cat. in an infinite loop. that's it. that's the whole thing.</div>
+        <div class="lc-url">zombieguy232.github.io/NYAN-CAT</div>
+      </div>
+      <div class="lc-arrow">→</div>
+    </a>
+
+    <a class="link-card" href="https://zombieguy232.github.io/portal" target="_blank">
+      <div class="lc-icon">🟠</div>
+      <div class="lc-body">
+        <div class="lc-name">Portal</div>
+        <div class="lc-desc">portal but pixelated and running on the TIC-80 game engine — surprisingly good</div>
+        <div class="lc-url">zombieguy232.github.io/portal</div>
+      </div>
+      <div class="lc-arrow">→</div>
+    </a>
+
+    <a class="link-card" href="https://zombieguy232.github.io/emu" target="_blank">
+      <div class="lc-icon">🕹️</div>
+      <div class="lc-body">
+        <div class="lc-name">RetroArch Emulator</div>
+        <div class="lc-desc">a full retro game emulator in the browser — load your own roms and play old games</div>
+        <div class="lc-url">zombieguy232.github.io/emu</div>
+      </div>
+      <div class="lc-arrow">→</div>
+    </a>
+
+    <a class="link-card" href="https://zombieguy232.github.io/os" target="_blank">
+      <div class="lc-icon">🖥️</div>
+      <div class="lc-body">
+        <div class="lc-name">Web OS</div>
+        <div class="lc-desc">a tiny operating system that runs inside the browser — just a fun thing to mess around with</div>
+        <div class="lc-url">zombieguy232.github.io/os</div>
+      </div>
+      <div class="lc-arrow">→</div>
+    </a>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">about</div>
+  <div class="section-title reveal">who is this guy</div>
+
+  <div class="about-box reveal">
+    <p>hey, i'm zombieguy88. i <strong>don't know how to code</strong> — i'm just doing this for fun. i find stuff that other people made and host it on github so it's easy to get to.</p>
+    <p>mostly i do this so me and other people can use it at school when we're supposed to be doing school work. you know how it is.</p>
+    <p>if something's broken or not loading, that's probably on me. i'll try to fix it eventually.</p>
+    <div class="about-note">
+      <strong>heads up:</strong> i didn't make any of the games, clients, or tools on this site. i'm just hosting them. all credit goes to the actual developers. this is just for fun and easy access.
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-brand"><span>zombieguy</span>88</div>
+  <div class="foot-note">just hosting things for fun · not affiliated with anything</div>
+</footer>
+<div class="footnote">*this is an approximation and it may not be correct</div>
+
+<script>
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
